@@ -146,6 +146,8 @@ agar pelanggan tetap loyal.
 
 ## Author
 
-IBM SkillsBuild x Hacktiv8 Capstone Project
+**Nico Alfianto**
 
-Customer Feedback Sentiment Analyzer
+Capstone Project – IBM SkillsBuild University x Hacktiv8
+
+GitHub: https://github.com/nico-alfianto
