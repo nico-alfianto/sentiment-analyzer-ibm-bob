@@ -134,6 +134,24 @@ agar pelanggan tetap loyal.
 
 ---
 
+## Pengujian Tambahan
+
+### Testing Sentimen Negatif dan Netral
+
+![Testing Lanjutan](screenshots/testing_lanjutan.png)
+
+Pengujian tambahan dilakukan untuk memastikan AI Agent mampu mengenali berbagai jenis sentimen termasuk kasus negatif dan netral.
+
+---
+
+### Ringkasan Hasil Akhir
+
+![Hasil Akhir](screenshots/hasil_akhir.png)
+
+AI Agent juga diuji untuk memberikan ringkasan analisis dan rekomendasi yang dapat digunakan pemilik usaha sebagai bahan evaluasi layanan.
+
+---
+
 ## Pengembangan Lanjutan
 
 1. Integrasi IBM Bob dengan Google Sheets
@@ -150,4 +168,4 @@ agar pelanggan tetap loyal.
 
 Capstone Project – IBM SkillsBuild University x Hacktiv8
 
-GitHub: https://github.com/nico-alfianto
+Portofolio: nico-alfianto.github.io
