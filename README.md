@@ -167,5 +167,3 @@ AI Agent juga diuji untuk memberikan ringkasan analisis dan rekomendasi yang dap
 **Nico Alfianto**
 
 Capstone Project – IBM SkillsBuild University x Hacktiv8
-
-Portofolio: https://nico-alfianto.github.io/
