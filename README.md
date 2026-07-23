@@ -10,7 +10,7 @@ AI Agent berbasis IBM Bob untuk membantu UMKM menganalisis sentimen feedback pel
 - Github untuk dokumentasi prompt
 
 ## Cara Menggunakan
-1. Buka IBM Bob: [paste link agent kamu di sini]
+1. Buka IBM Bob
 2. Masuk ke tab Playground
 3. Copy paste feedback pelanggan pada kolom input
 4. AI akan otomatis membalas dengan format Sentimen, Alasan, dan Saran
