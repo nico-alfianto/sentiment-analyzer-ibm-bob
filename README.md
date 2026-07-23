@@ -1,10 +1,22 @@
-# Customer Feedback Sentiment Analyzer
-AI Agent menggunakan IBM Bob untuk analisis sentimen feedback UMKM.
+# Customer Feedback Sentiment Analyzer - IBM Bob
 
-## Cara Pakai
-1. Buka link IBM Bob: [link agent kamu]
-2. Copy paste feedback pelanggan di Playground
-3. Lihat hasil Sentimen, Alasan, dan Saran
+Project Capstone IBM Skillsbuild x Hacktiv8
 
-## Prompt
-Lihat file prompt.txt
+## Deskripsi
+AI Agent berbasis IBM Bob untuk membantu UMKM menganalisis sentimen feedback pelanggan dari Google Review, Shopee, Instagram, dll.
+
+## Tools
+- IBM Bob Browser
+- Github untuk dokumentasi prompt
+
+## Cara Menggunakan
+1. Buka IBM Bob: [paste link agent kamu di sini]
+2. Masuk ke tab Playground
+3. Copy paste feedback pelanggan pada kolom input
+4. AI akan otomatis membalas dengan format Sentimen, Alasan, dan Saran
+
+## Struktur Prompt
+Lihat file `prompt.txt` untuk detail Prompt Layering yang digunakan.
+
+## Author
+Nico Alfianto
