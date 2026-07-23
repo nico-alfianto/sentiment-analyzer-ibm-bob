@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Feedback Sentiment Analyzer | Nico Alfianto</title>
+  <style>
+    :root {
+      --primary: #1e40af;
+      --primary-light: #3b82f6;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --code-bg: #0f172a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { 
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+      background: var(--bg); 
+      color: var(--text);
+      line-height: 1.7;
+    }
+    .container { 
+      max-width: 960px; 
+      margin: 0 auto; 
+      padding: 20px; 
+    }
+    header { 
+      background: linear-gradient(135deg, var(--primary), var(--primary-light)); 
+      color: white; 
+      padding: 50px 20px; 
+      border-radius: 16px; 
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    header h1 { font-size: clamp(1.8rem, 5vw, 2.6rem); margin-bottom: 10px; }
+    header p { font-size: clamp(1rem, 2.5vw, 1.2rem); opacity: 0.95; }
+    section { 
+      background: var(--card); 
+      padding: clamp(20px, 4vw, 32px); 
+      border-radius: 14px; 
+      margin-bottom: 20px; 
+      border: 1px solid var(--border);
+    }
+    h2 { 
+      color: var(--primary); 
+      font-size: clamp(1.3rem, 3vw, 1.6rem);
+      margin-bottom: 16px; 
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--border);
+    }
+    h3 { color: var(--primary); margin: 18px 0 10px; font-size: 1.15rem; }
+    ul { margin-left: 22px; }
+    li { margin-bottom: 8px; }
+    hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+    pre { 
+      background: var(--code-bg); 
+      color: #e2e8f0; 
+      padding: 16px; 
+      border-radius: 10px; 
+      overflow-x: auto; 
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      margin: 12px 0;
+    }
+    .output-box { 
+      background: #ecfdf5; 
+      border-left: 4px solid #10b981; 
+      padding: 16px; 
+      border-radius: 8px; 
+      margin: 12px 0; 
+    }
+    .img-wrap { 
+      margin: 16px 0; 
+      text-align: center;
+    }
+    .img-wrap img { 
+      max-width: 100%; 
+      height: auto; 
+      border-radius: 10px; 
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    .img-placeholder {
+      background: #f3f4f6;
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--muted);
+    }
+    footer { 
+      text-align: center; 
+      padding: 30px 20px; 
+      color: var(--muted); 
+      font-size: 0.95rem;
+    }
+    a { color: var(--primary-light); text-decoration: none; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+    }
+    @media (max-width: 640px) {
+      .container { padding: 12px; }
+      header { padding: 36px 16px; }
+      section { padding: 20px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Customer Feedback Sentiment Analyzer</h1>
+      <p>AI Agent berbasis IBM watsonx untuk UMKM Indonesia</p>
+    </header>
+
+    <section>
+      <h2>Deskripsi</h2>
+      <p>Customer Feedback Sentiment Analyzer adalah AI Agent berbasis IBM watsonx (IBM Bob) yang membantu pemilik UMKM menganalisis sentimen pelanggan secara otomatis.</p>
+      <p>AI Agent menerima teks feedback pelanggan kemudian mengklasifikasikan sentimen ke dalam kategori <b>Positif, Negatif, atau Netral</b> serta memberikan alasan dan saran singkat yang dapat langsung digunakan untuk meningkatkan kualitas layanan.</p>
+    </section>
+
+    <section>
+      <h2>Tujuan Project</h2>
+      <p>Membantu pemilik UMKM memahami opini pelanggan dari berbagai platform seperti:</p>
+      <ul>
+        <li>Google Review</li>
+        <li>Instagram</li>
+        <li>Shopee</li>
+        <li>Tokopedia</li>
+        <li>WhatsApp Business</li>
+      </ul>
+      <p>secara cepat tanpa harus membaca komentar satu per satu.</p>
+    </section>
+
+    <section>
+      <h2>Problem Statement</h2>
+      <p>UMKM saat ini menghadapi banyak feedback pelanggan yang tersebar di berbagai platform digital. Membaca dan mengelompokkan komentar secara manual membutuhkan waktu yang lama dan berisiko melewatkan keluhan penting.</p>
+      <p><b>Akibatnya:</b></p>
+      <ul>
+        <li>Keluhan pelanggan terlambat ditangani</li>
+        <li>Kualitas layanan sulit dievaluasi</li>
+        <li>Reputasi bisnis dapat menurun</li>
+        <li>Peluang perbaikan layanan terlewatkan</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Target Users</h2>
+      <div class="grid-2">
+        <li>Pemilik UMKM</li>
+        <li>Admin Media Sosial</li>
+        <li>Customer Service</li>
+        <li>Tim Marketing</li>
+      </div>
+    </section>
+
+    <section>
+      <h2>Fitur Utama</h2>
+      <ul>
+        <li>Analisis sentimen pelanggan</li>
+        <li>Klasifikasi Positif</li>
+        <li>Klasifikasi Negatif</li>
+        <li>Klasifikasi Netral</li>
+        <li>Alasan singkat hasil analisis</li>
+        <li>Saran tindakan untuk pemilik usaha</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Tools</h2>
+      <ul>
+        <li>IBM watsonx Playground (IBM Bob)</li>
+        <li>Granite-3-8B-Instruct</li>
+        <li>GitHub</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Prompt Layering</h2>
+      
+      <h3>Layer 1 - Role</h3>
+      <pre>Kamu adalah AI Analis Sentimen untuk UMKM Indonesia.
+Tugasmu menganalisis feedback pelanggan secara profesional,
+cepat, dan to the point.
+Gunakan Bahasa Indonesia yang sopan dan mudah dipahami.</pre>
+
+      <h3>Layer 2 - Task</h3>
+      <pre>Analisis teks feedback pelanggan di bawah ini.
+
+Klasifikasikan sentimen menjadi:
+- Positif
+- Negatif
+- Netral
+
+Berikan alasan singkat berdasarkan isi feedback.</pre>
+
+      <h3>Layer 3 - Output Format</h3>
+      <pre>Sentimen: [Positif/Negatif/Netral]
+Alasan: [1 kalimat alasan]
+Saran: [1 saran singkat]</pre>
+    </section>
+
+    <section>
+      <h2>Screenshot Prompt IBM Bob</h2>
+      <div class="img-wrap">
+        <img src="prompt ibm bob.png" alt="Prompt IBM Bob" onerror="this.outerHTML='<div class=img-placeholder>📷 prompt ibm bob.png<br><small>Letakkan file gambar di folder yang sama</small></div>'">
+      </div>
+    </section>
+
+    <section>
+      <h2>Screenshot Hasil Pengujian</h2>
+      <div class="img-wrap">
+        <img src="hasil ibm bob.png" alt="Hasil IBM Bob" onerror="this.outerHTML='<div class=img-placeholder>📷 hasil ibm bob.png<br><small>Letakkan file gambar di folder yang sama</small></div>'">
+      </div>
+    </section>
+
+    <section>
+      <h2>Hasil Pengujian</h2>
+      <p><b>Input:</b></p>
+      <pre>Makanannya enak dan harganya terjangkau,
+pelayanannya juga ramah banget.
+Pasti balik lagi!</pre>
+
+      <p><b>Output:</b></p>
+      <div class="output-box">
+        <b>Sentimen:</b> Positif<br><br>
+        <b>Alasan:</b><br>
+        Pelanggan merasa puas karena makanan enak,<br>
+        harga terjangkau, dan pelayanan ramah.<br><br>
+        <b>Saran:</b><br>
+        Pertahankan kualitas rasa, harga, dan pelayanan<br>
+        agar pelanggan tetap loyal.
+      </div>
+    </section>
+
+    <section>
+      <h2>Pengujian Tambahan</h2>
+      <h3>Testing Sentimen Negatif dan Netral</h3>
+      <div class="img-wrap">
+        <img src="screenshots/testing_lanjutan.png" alt="Testing Lanjutan" onerror="this.outerHTML='<div class=img-placeholder>📷 screenshots/testing_lanjutan.png<br><small>Letakkan file gambar di folder screenshots/</small></div>'">
+      </div>
+      <p>Pengujian tambahan dilakukan untuk memastikan AI Agent mampu mengenali berbagai jenis sentimen termasuk kasus negatif dan netral.</p>
+
+      <hr>
+
+      <h3>Ringkasan Hasil Akhir</h3>
+      <div class="img-wrap">
+        <img src="screenshots/hasil_akhir.png" alt="Hasil Akhir" onerror="this.outerHTML='<div class=img-placeholder>📷 screenshots/hasil_akhir.png<br><small>Letakkan file gambar di folder screenshots/</small></div>'">
+      </div>
+      <p>AI Agent juga diuji untuk memberikan ringkasan analisis dan rekomendasi yang dapat digunakan pemilik usaha sebagai bahan evaluasi layanan.</p>
+    </section>
+
+    <section>
+      <h2>Pengembangan Lanjutan</h2>
+      <ol>
+        <li>Integrasi IBM Bob dengan Google Sheets</li>
+        <li>Analisis massal ratusan komentar sekaligus</li>
+        <li>Dashboard grafik sentimen mingguan</li>
+        <li>Integrasi dengan aplikasi web menggunakan Streamlit</li>
+        <li>Visualisasi tren sentimen pelanggan</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Author</h2>
+      <p><b>Nico Alfianto</b></p>
+      <p>Capstone Project – IBM SkillsBuild University x Hacktiv8</p>
+      <p>Portofolio: <a href="https://nico-alfianto.github.io/" target="_blank">https://nico-alfianto.github.io/</a></p>
+    </section>
+
+    <footer>
+      © 2026 Nico Alfianto. Dibuat dengan HTML & CSS Vanilla.
+    </footer>
+  </div>
+</body>
+  </html>
