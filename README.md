@@ -98,7 +98,7 @@ Saran: [1 saran singkat]
 
 ## Screenshot Prompt IBM Bob
 
-![Prompt IBM Bob](promt%20ibm%20bob.png)
+![Prompt IBM Bob](prompt%20ibm%20bob.png)
 
 ---
 
