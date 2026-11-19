@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Feedback Sentiment Analyzer | IBM watsonx | Nico Alfianto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0A0A0B;--card:#131315;--card2:#1A1A1D;--border:#232326;--text:#F4F4F5;--muted:#A1A1AA;--muted2:#71717A;--pill:#1E1E21}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+header{padding:48px 0 32px;border-bottom:1px solid var(--border)}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap}
+.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted2);font-weight:600;margin-bottom:16px}
+.eyebrow span{color:var(--text)}
+h1{font-size:42px;line-height:.95;letter-spacing:-.04em;font-weight:800}
+h1 em{font-style:normal;color:var(--muted)}
+.header-desc{max-width:560px;color:var(--muted);font-size:16px;margin-top:18px;line-height:1.7}
+.header-right{text-align:right}
+.header-right strong{display:block;font-size:15px}
+.header-right p{color:var(--muted);font-size:14px;margin-top:4px}
+.header-right .actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:16px}
+.btn-white{display:inline-block;background:#fff;color:#000;font-size:14px;font-weight:600;padding:11px 18px;border-radius:999px}
+.btn-outline{display:inline-block;background:transparent;color:#fff;border:1px solid #3F3F46;font-size:14px;font-weight:600;padding:11px 18px;border-radius:999px}
+main{padding:32px 0 80px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;margin-bottom:20px}
+.card h3{font-size:18px;margin-bottom:6px}
+.card p.sub{font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.7}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.kpi{background:var(--card2);border:1px solid var(--border);border-radius:16px;padding:20px}
+.kpi span{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2);font-weight:600}
+.kpi b{display:block;font-size:28px;letter-spacing:-.03em;margin:8px 0 4px}
+.kpi small{font-size:13px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.image-wrapper{width:100%;height:320px;background:#0A0A0B;border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:12px;cursor:zoom-in}
+.image-wrapper img{width:100%;height:100%;object-fit:contain}
+.image-wrapper.tall{height:380px}
+.insight{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:16px;font-size:14px;line-height:1.7;color:var(--muted)}
+.insight b{color:#fff}
+.table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+.table th{text-align:left;padding:12px;border-bottom:1px solid var(--border);color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.table td{padding:12px;border-bottom:1px solid var(--border);line-height:1.6;vertical-align:top}
+.pg-steps{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:20px}
+.pg-step{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:16px}
+.pg-step span{font-size:12px;color:var(--muted2);font-weight:600;letter-spacing:.08em}
+.pg-step b{display:block;font-size:14px;margin:6px 0 4px}
+.pg-step p{font-size:13px;color:var(--muted);line-height:1.6}
+.pg-preset{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.pg-preset button{font-family:inherit;background:transparent;border:1px solid #3F3F46;color:var(--text);padding:9px 14px;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer}
+.pg-preset button.active{background:#fff;color:#000;border-color:#fff}
+.pg-grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:20px;align-items:start}
+.pg-seg{display:flex;gap:8px;flex-wrap:wrap}
+.pg-seg button{font-family:inherit;background:transparent;border:1px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer}
+.pg-seg button.on{background:#fff;color:#000;border-color:#fff}
+.pg-big{font-size:42px;font-weight:800;letter-spacing:-.04em;line-height:1}
+.pg-badge{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:7px 12px;border-radius:999px;white-space:nowrap}
+.pg-badge.green{background:#052E16;color:#86EFAC;border:1px solid #166534}
+.pg-badge.red{background:#450A0A;color:#FCA5A5;border:1px solid #7F1D1D}
+.pg-badge.yellow{background:#422006;color:#FDE68A;border:1px solid #92400E}
+.pg-contrib,.pg-action{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:16px;margin-top:12px}
+.pg-meta{margin-top:20px;padding-top:16px;border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;font-size:12px;color:var(--muted2);line-height:1.7}
+.pg-meta b{color:var(--text)}
+textarea{width:100%;min-height:110px;padding:14px;border-radius:12px;border:1px solid var(--border);background:#0A0A0B;color:var(--text);font-family:inherit;font-size:15px;line-height:1.6;resize:vertical}
+pre{background:#0A0A0B;border:1px solid var(--border);border-radius:12px;padding:16px;font-size:13px;line-height:1.7;color:#D4D4D8;white-space:pre-wrap;word-break:break-word;font-family:ui-monospace,Menlo,monospace;margin-top:10px}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.92);justify-content:center;align-items:center;z-index:9999}
+.modal.active{display:flex}
+.modal img{max-width:92%;max-height:88%;border-radius:12px}
+.modal-close{position:absolute;top:20px;right:30px;font-size:40px;color:#fff;cursor:pointer}
+footer{border-top:1px solid var(--border);padding:28px 0 40px;color:var(--muted2);font-size:13px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media(max-width:900px){h1{font-size:34px}.kpi-grid{grid-template-columns:1fr 1fr}.grid2,.pg-grid2,.pg-steps{grid-template-columns:1fr}.header-right{text-align:left}.header-right .actions{justify-content:flex-start}.image-wrapper,.image-wrapper.tall{height:260px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="top"><div>
+<div class="eyebrow">AI Agent <span>— IBM watsonx • Granite-3-8B-Instruct</span></div>
+<h1>Customer Feedback<br><em>Sentiment Analyzer</em></h1>
+<p class="header-desc">AI Agent for Indonesian MSMEs (UMKM) to analyze customer sentiment automatically — Positive, Negative, or Neutral — with reason + actionable suggestion. Built with Prompt Layering on IBM Bob.</p>
+<p style="font-size:13px;color:var(--muted2);margin-top:12px;">Capstone Project — IBM SkillsBuild University x Hacktiv8</p>
+</div><div class="header-right"><strong>Nico Alfianto</strong><p>Bogor, Indonesia</p><div class="actions"><a class="btn-white" href="https://nico-myproject.github.io">Back to Portfolio</a><a class="btn-outline" href="#sentiment-playground">Try Analyzer</a></div></div></div></div></header>
+<main class="wrap">
+<div class="kpi-grid" style="margin-bottom:20px;">
+<div class="kpi"><span>Classes</span><b>3 Classes</b><small>Positive / Negative / Neutral</small></div>
+<div class="kpi"><span>Model</span><b>Granite-3-8B</b><small>Granite-3-8B-Instruct</small></div>
+<div class="kpi"><span>Platform</span><b>IBM watsonx</b><small>IBM Bob Playground</small></div>
+<div class="kpi"><span>Target Users</span><b>UMKM</b><small>MSME Owners in Indonesia</small></div>
+</div>
+<div class="card"><h3>Project Overview</h3><p style="font-size:14px;color:var(--muted);line-height:1.8;">UMKM owners receive customer feedback scattered across Google Review, Instagram, Shopee, Tokopedia, and WhatsApp Business. Reading and grouping comments manually takes a long time and risks missing important complaints. This AI Agent receives customer feedback text, classifies sentiment into Positive, Negative, or Neutral, and gives a short reason + suggestion that can be used immediately to improve service quality.</p></div>
+<!-- PLAYGROUND -->
+<div class="card" id="sentiment-playground">
+<div class="eyebrow" style="margin-bottom:10px;">Interactive Playground <span>— Prompt Layering Simulator</span></div>
+<h2 style="font-size:28px;">Try The Analyzer</h2>
+<p class="sub" style="max-width:720px;">Type customer feedback, or pick a preset. This demo shows the exact output format from IBM Bob — Sentimen / Alasan / Saran. The live model is Granite-3-8B-Instruct on IBM watsonx. This browser demo uses rule-based logic to simulate the same prompt layering.</p>
+<div class="pg-steps">
+<div class="pg-step"><span>STEP 01</span><b>Paste feedback</b><p>From Google Review, Shopee, Instagram, Tokopedia, WhatsApp Business.</p></div>
+<div class="pg-step"><span>STEP 02</span><b>Prompt Layering runs</b><p>Role → Task → Output Format. See the 3 layers below.</p></div>
+<div class="pg-step"><span>STEP 03</span><b>Get action</b><p>Not just sentiment — reason + suggestion you can act on.</p></div>
+</div>
+<div class="pg-preset" id="pgPreset">
+<button onclick="setPresetPG(0,this)" class="active">Positive — Food & Service</button>
+<button onclick="setPresetPG(1,this)">Negative — Late & Cold</button>
+<button onclick="setPresetPG(2,this)">Neutral — As Described</button>
+</div>
+<div class="pg-grid2">
+<div>
+<div style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);font-weight:600;">Customer Feedback (Bahasa Indonesia)</div>
+<textarea id="pgInput" oninput="runPG()">Makanannya enak dan harganya terjangkau, pelayanannya juga ramah banget. Pasti balik lagi!</textarea>
+<button onclick="runPG()" class="btn-white" style="margin-top:12px;border:none;cursor:pointer;font-family:inherit;">Analyze Sentiment</button>
+<div class="pg-action"><div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;">Prompt Layering — What Runs Behind</div><p style="font-size:13px;line-height:1.7;color:var(--muted);margin-top:8px;"><b style="color:#fff;">Layer 1 — Role:</b> Kamu adalah AI Analis Sentimen untuk UMKM Indonesia. Profesional, cepat, to the point, Bahasa Indonesia sopan.<br><br><b style="color:#fff;">Layer 2 — Task:</b> Klasifikasikan sentimen jadi Positif / Negatif / Netral + alasan singkat.<br><br><b style="color:#fff;">Layer 3 — Output:</b> Sentimen: [...] Alasan: [...] Saran: [...]</p></div>
+</div>
+<div>
+<div style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);font-weight:600;">IBM Bob Output Format</div>
+<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-top:10px;gap:12px;">
+<div><div class="pg-big" id="pgTitle">Positif</div><div style="font-size:14px;color:var(--muted);margin-top:6px;" id="pgSubtitle">Sentimen</div></div>
+<span class="pg-badge green" id="pgBadge">POSITIF</span>
+</div>
+<div class="pg-contrib"><div style="font-size:13px;font-weight:700;margin-bottom:6px;">Alasan</div><div id="pgReason" style="font-size:14px;line-height:1.7;color:var(--muted);"></div></div>
+<div class="pg-contrib"><div style="font-size:13px;font-weight:700;margin-bottom:6px;">Saran</div><div id="pgSuggest" style="font-size:14px;line-height:1.7;color:var(--muted);"></div></div>
+<div class="pg-contrib"><div style="font-size:13px;font-weight:700;margin-bottom:6px;">Keywords Detected</div><div id="pgKeys" style="font-size:13px;line-height:1.7;color:var(--muted);"></div></div>
+</div>
+</div>
+<div class="pg-meta"><div><b>Model:</b> Granite-3-8B-Instruct</div><div><b>Platform:</b> IBM watsonx Playground (IBM Bob)</div><div><b>Prompt:</b> prompt.txt in repo</div><div><b>Note:</b> Browser demo is rule-based simulation. Real inference runs on IBM watsonx — see screenshots below.</div></div>
+</div>
+
+<!-- PROBLEM + TARGET -->
+<div class="grid2">
+<div class="card"><h3>Problem Statement</h3><p class="sub">Why UMKM needs this.</p><p style="font-size:14px;color:var(--muted);line-height:1.9;">Feedback scattered across platforms<br>Manual reading takes long<br>Important complaints get missed<br>Complaints handled late<br>Service quality hard to evaluate<br>Reputation can drop<br>Improvement opportunities missed</p></div>
+<div class="card"><h3>Target Users & Platforms</h3><p class="sub">Who uses it, where feedback comes from.</p><p style="font-size:14px;color:var(--muted);line-height:1.9;"><b style="color:#fff;">Users:</b> UMKM Owners, Social Media Admin, Customer Service, Marketing Team<br><br><b style="color:#fff;">Platforms:</b> Google Review, Instagram, Shopee, Tokopedia, WhatsApp Business</p><div class="insight" style="margin-top:12px;"><b>Value:</b> Read 100 comments in minutes, not hours — and never miss a complaint.</div></div>
+</div>
+
+<!-- PROMPT.TXT -->
+<div class="card"><h3>Prompt Layering — Full Prompt (prompt.txt)</h3><p class="sub">Copy-paste ready. This is the exact prompt used in IBM Bob.</p><pre>Layer 1 - Role
+Kamu adalah AI Analis Sentimen untuk UMKM Indonesia.
+Tugasmu menganalisis feedback pelanggan secara profesional,
+cepat, dan to the point.
+Gunakan Bahasa Indonesia yang sopan dan mudah dipahami.
+
+Layer 2 - Task
+Analisis teks feedback pelanggan di bawah ini.
+
+Klasifikasikan sentimen menjadi:
+- Positif
+- Negatif
+- Netral
+
+Berikan alasan singkat berdasarkan isi feedback.
+
+Layer 3 - Output Format
+Sentimen: [Positif/Negatif/Netral]
+Alasan: [1 kalimat alasan]
+Saran: [1 saran singkat]</pre><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;"><a class="btn-white" href="prompt.txt">View prompt.txt</a></div></div>
+
+<!-- SCREENSHOTS -->
+<div class="card"><h3>Proof — Real IBM Bob Screenshots</h3><p class="sub">Real inference from IBM watsonx Playground. Click to zoom.</p><div class="grid2">
+<div><h3 style="margin-bottom:10px;">Screenshot Prompt IBM Bob</h3><div class="image-wrapper" onclick="openModal('prompt ibm bob.png')"><img src="prompt ibm bob.png" alt="Prompt IBM Bob" loading="lazy"></div><div class="insight"><b>What it shows:</b> Prompt Layering running in IBM watsonx Playground (IBM Bob).</div></div>
+<div><h3 style="margin-bottom:10px;">Screenshot Hasil Pengujian</h3><div class="image-wrapper" onclick="openModal('hasil ibm bob.png')"><img src="hasil ibm bob.png" alt="Hasil IBM Bob" loading="lazy"></div><div class="insight"><b>What it shows:</b> Real output for the positive example — Sentimen / Alasan / Saran.</div></div>
+<div><h3 style="margin-bottom:10px;">Testing Sentimen Negatif dan Netral</h3><div class="image-wrapper" onclick="openModal('screenshots/testing_lanjutan.png')"><img src="screenshots/testing_lanjutan.png" alt="Testing Lanjutan" loading="lazy"></div><div class="insight"><b>What it shows:</b> Additional testing to ensure the agent recognizes Negative and Neutral cases too.</div></div>
+<div><h3 style="margin-bottom:10px;">Ringkasan Hasil Akhir</h3><div class="image-wrapper" onclick="openModal('screenshots/hasil_akhir.png')"><img src="screenshots/hasil_akhir.png" alt="Hasil Akhir" loading="lazy"></div><div class="insight"><b>What it shows:</b> Summary analysis + recommendations for business evaluation.</div></div>
+</div></div>
+
+<!-- TEST CASE -->
+<div class="card"><h3>Test Case — From README</h3><p class="sub">The exact example tested on IBM Bob.</p><div class="grid2"><div><p style="font-size:13px;color:var(--muted2);letter-spacing:.08em;font-weight:600;">INPUT</p><pre>Makanannya enak dan harganya terjangkau,
+pelayanannya juga ramah banget.
+Pasti balik lagi!</pre></div><div><p style="font-size:13px;color:var(--muted2);letter-spacing:.08em;font-weight:600;">OUTPUT — IBM BOB</p><div class="insight"><b>Sentimen:</b> Positif<br><br><b>Alasan:</b> Pelanggan merasa puas karena makanan enak, harga terjangkau, dan pelayanan ramah.<br><br><b>Saran:</b> Pertahankan kualitas rasa, harga, dan pelayanan agar pelanggan tetap loyal.</div></div></div></div>
+
+<!-- FUTURE + REPO -->
+<div class="grid2">
+<div class="card"><h3>Future Improvements</h3><p class="sub">Next steps.</p><p style="font-size:14px;color:var(--muted);line-height:1.9;">Integrate IBM Bob with Google Sheets<br>Bulk analysis — hundreds of comments at once<br>Weekly sentiment graph dashboard<br>Web app integration with Streamlit<br>Sentiment trend visualization</p></div>
+<div class="card"><h3>Repository & Tools</h3><p class="sub">Files in repo.</p><pre>sentiment-analyzer-ibm-bob/
+├── index.html
+├── prompt.txt
+├── prompt ibm bob.png
+├── hasil ibm bob.png
+└── screenshots/
+    ├── testing_lanjutan.png
+    └── hasil_akhir.png</pre><p style="font-size:13px;color:var(--muted);margin-top:12px;">Tools: IBM watsonx Playground (IBM Bob) • Granite-3-8B-Instruct • GitHub</p></div>
+</div>
+
+</main>
+<footer><div class="wrap"><span>© 2026 Nico Alfianto — Sentiment Analyzer IBM Bob. IBM SkillsBuild University x Hacktiv8 Capstone</span><span><a href="https://nico-myproject.github.io">Portfolio</a></span></div></footer>
+<div class="modal" id="imageModal" onclick="closeModal()"><span class="modal-close">&times;</span><img id="modalImg" src="" alt="Full View"></div>
+<script>
+function openModal(src){document.getElementById('modalImg').src=src;document.getElementById('imageModal').classList.add('active');}
+function closeModal(){document.getElementById('imageModal').classList.remove('active');}
+var PRESETS=[
+{text:'Makanannya enak dan harganya terjangkau, pelayanannya juga ramah banget. Pasti balik lagi!',sent:'Positif',reason:'Pelanggan merasa puas karena makanan enak, harga terjangkau, dan pelayanan ramah.',suggest:'Pertahankan kualitas rasa, harga, dan pelayanan agar pelanggan tetap loyal.',keys:'enak, terjangkau, ramah, balik lagi'},
+{text:'Kecewa banget, pesanan lama banget sampe 2 jam, makanan udah dingin pas sampe. Gak bakal order lagi!',sent:'Negatif',reason:'Pelanggan kecewa karena pesanan lama dan makanan dingin saat sampai.',suggest:'Perbaiki waktu pengiriman dan kualitas packing agar makanan tetap hangat, lalu follow-up pelanggan.',keys:'kecewa, lama, dingin, gak bakal order lagi'},
+{text:'Pesanan sudah sampai, sesuai deskripsi. Pengiriman standar, tidak ada yang spesial.',sent:'Netral',reason:'Pelanggan menyampaikan fakta tanpa emosi positif atau negatif yang kuat.',suggest:'Tanyakan feedback spesifik agar bisa meningkatkan pengalaman pelanggan.',keys:'sesuai deskripsi, standar, tidak ada yang spesial'}
+];
+function setPresetPG(i,btn){var b=document.querySelectorAll('#pgPreset button');for(var j=0;j<b.length;j++)b[j].classList.remove('active');if(btn)btn.classList.add('active');document.getElementById('pgInput').value=PRESETS[i].text;runPG();}
+function runPG(){
+var t=document.getElementById('pgInput').value.toLowerCase();
+var pos=['enak','mantap','bagus','ramah','terjangkau','puas','suka','rekomend','balik lagi','cepat','lezat','bersih','helpful','murah','worth','love','top','best','luar biasa','nyaman','recommended'];
+var neg=['kecewa','buruk','lama','dingin','lambat','jelek','kotor','mahal','tidak sesuai','gak','tidak','rusak','basi','pedas','asin','mengecewakan','parah','komplain','marah','kesal','batal'];
+var p=0,n=0,pk=[],nk=[];
+for(var i=0;i<pos.length;i++){if(t.indexOf(pos[i])!==-1){p++;pk.push(pos[i]);}}
+for(var j=0;j<neg.length;j++){if(t.indexOf(neg[j])!==-1){n++;nk.push(neg[j]);}}
+var sent='Netral',reason='Pelanggan menyampaikan fakta tanpa emosi positif atau negatif yang kuat.',suggest='Tanyakan feedback spesifik agar bisa meningkatkan pengalaman pelanggan.',cls='yellow',keys='';
+if(p>n){sent='Positif';cls='green';reason='Terdeteksi kata positif: '+pk.join(', ')+'. Pelanggan menyampaikan kepuasan.';suggest='Pertahankan kualitas yang dipuji pelanggan dan minta mereka memberi review / rekomendasi.';keys=pk.join(', ');}
+else if(n>p){sent='Negatif';cls='red';reason='Terdeteksi kata negatif: '+nk.join(', ')+'. Pelanggan menyampaikan keluhan.';suggest='Tanggapi keluhan dalam 1x24 jam, minta maaf, dan tawarkan solusi / kompensasi yang jelas.';keys=nk.join(', ');}
+else {keys='Tidak ada kata sentimen kuat terdeteksi — netral.';}
+if(t.indexOf('enak')!==-1 && t.indexOf('terjangkau')!==-1 && t.indexOf('ramah')!==-1){sent='Positif';cls='green';reason='Pelanggan merasa puas karena makanan enak, harga terjangkau, dan pelayanan ramah.';suggest='Pertahankan kualitas rasa, harga, dan pelayanan agar pelanggan tetap loyal.';keys='enak, terjangkau, ramah, balik lagi';}
+document.getElementById('pgTitle').textContent=sent;
+document.getElementById('pgBadge').textContent=sent.toUpperCase();document.getElementById('pgBadge').className='pg-badge '+cls;
+document.getElementById('pgReason').textContent=reason;document.getElementById('pgSuggest').textContent=suggest;document.getElementById('pgKeys').textContent=keys;
+}
+runPG();
+</script>
+</body>
+  </html>
